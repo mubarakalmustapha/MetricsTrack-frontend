@@ -26,7 +26,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     }
   };
 
-  // Validate form
   const validateForm = (): boolean => {
     const newErrors: Partial<LoginFormData> = {};
     
@@ -154,7 +153,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           <button
             onClick={handleLogin}
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+            className="cursor-pointer w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
           >
             {isLoading ? (
               <div className="flex items-center justify-center gap-2">
@@ -187,6 +186,17 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               <span className="font-mono text-xs">admin123 Or staff123</span>
             </div>
           </div>
+        </div>
+
+        <div className="mt-8 text-center">
+          <p className="text-sm text-gray-600">
+            Don't have an account?{' '}
+            <button
+              className="text-blue-600 hover:text-blue-700 font-semibold cursor-pointer"
+            >
+              Sign Up
+            </button>
+          </p>
         </div>
 
         <div className="mt-6 text-center">
