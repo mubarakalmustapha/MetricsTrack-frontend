@@ -4,6 +4,7 @@ import LoginPage from "./components/LoginPage";
 import StaffDashboard from "./components/StaffDashboard";
 import AdminLayout from "./components/AdminLayout";
 import AdminRegister from "./components/AdminRegister";
+import NotFound from "./components/NotFound";
 import { v4 as uuidv4 } from "uuid";
 
 
@@ -108,8 +109,7 @@ export default function App() {
       />
 
       <Route path="/" element={<Navigate to="/login" replace />} />
-
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
 
   );
