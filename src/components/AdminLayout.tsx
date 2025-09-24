@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import StaffManagement from "./StaffManagement";
 import ReportsPage from "./ReportsPage";
-import AdminDashboard from "./AdminDashboard";
+import AdminDashboard from "./AdminDashboard/AdminDashboard";
 
 type Page = "dashboard" | "staff" | "reports";
 
