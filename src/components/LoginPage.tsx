@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BarChart3, User, Lock, Eye, EyeOff } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormData {
   email: string;
@@ -11,6 +12,8 @@ interface LoginPageProps {
 }
 
 const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
@@ -51,7 +54,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     setIsLoading(true);
     
     await new Promise(resolve => setTimeout(resolve, 1000));
-    // Getting adming or staff for testing purpose
     const role = formData.email.toLowerCase().includes('admin') ? 'admin' : 'staff';
     onLogin(formData.email, formData.password, role);
     setIsLoading(false);
@@ -166,29 +168,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
           </button>
         </div>
 
-        <div className="mt-8 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-          <div className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-            <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-            Demo Credentials
-          </div>
-
-          <div className="space-y-2 text-sm text-gray-600">
-            <div className="flex justify-between items-center bg-white/50 px-3 py-2 rounded-lg">
-              <span className="font-medium">Staff Login:</span>
-              <span className="font-mono text-xs">staff@company.com</span>
-            </div>
-            <div className="flex justify-between items-center bg-white/50 px-3 py-2 rounded-lg">
-              <span className="font-medium">Admin Login:</span>
-              <span className="font-mono text-xs">admin@company.com</span>
-            </div>
-            <div className="flex justify-between items-center bg-white/50 px-3 py-2 rounded-lg">
-              <span className="font-medium">Password:</span>
-              <span className="font-mono text-xs">admin123 Or staff123</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-8 text-center">
+        <div  onClick={() => navigate("/register")} className="mt-8 text-center">
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
             <button

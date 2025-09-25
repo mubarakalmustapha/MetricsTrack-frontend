@@ -1,37 +1,28 @@
 import React, { useState } from "react";
-import StaffManagement from "./StaffManagement";
-import ReportsPage from "./ReportsPage";
+import StaffManagement from "./StaffManagement/StaffManagement";
 import AdminDashboard from "./AdminDashboard/AdminDashboard";
+import type { AdminUser } from "../types/index";
 
 type Page = "dashboard" | "staff" | "reports";
 
-interface AdminUser {
-  id: string;
-  name: string;
-  email: string;
-}
-
 type AdminLayoutProps = {
-  user: AdminUser;
+  admin: AdminUser;
   onLogout: () => void;
 };
 
-const AdminLayout: React.FC<AdminLayoutProps> = ({ user, onLogout }) => {
+const AdminLayout: React.FC<AdminLayoutProps> = ({ admin: admin, onLogout }) => {
   const [activePage, setActivePage] = useState<Page>("dashboard");
 
   const renderPage = () => {
     switch (activePage) {
       case "staff":
         return <StaffManagement onBack={() => setActivePage("dashboard")} />;
-      case "reports":
-        return <ReportsPage onBack={() => setActivePage("dashboard")} />;
       default:
-        return user ? (
-          <AdminDashboard user={user} onLogout={onLogout} />
+        return admin ? (
+          <AdminDashboard user={admin} onLogout={onLogout} />
         ) : (
           <div>Please login as admin</div>
         );
-
     }
   };
 
@@ -40,7 +31,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ user, onLogout }) => {
 
       <aside className="w-64 bg-gray-800 text-white flex flex-col p-4 space-y-4">
         <h2 className="text-xl font-bold mb-6">
-          Admin Panel {user ? `(${user.email})` : ""}
+          Admin Panel {admin ? `(${admin.email})` : ""}
         </h2>
 
         <button
@@ -63,17 +54,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ user, onLogout }) => {
           }`}
         >
           Staff Management
-        </button>
-
-        <button
-          onClick={() => setActivePage("reports")}
-          className={`px-4 py-2 rounded text-left ${
-            activePage === "reports"
-              ? "bg-gray-700 font-semibold"
-              : "hover:bg-gray-700"
-          }`}
-        >
-          Reports
         </button>
 
         <button

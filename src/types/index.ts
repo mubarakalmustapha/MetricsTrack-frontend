@@ -4,6 +4,7 @@ export interface AdminUser {
   id: string;
   name: string;
   email: string;
+  role: "admin" | "staff";
 }
 
 export interface StaffMember {
@@ -18,6 +19,7 @@ export interface StaffMember {
   hoursMonth: string;
   lastSeen?: string;
   department: string;
+  role: "admin" | "staff";
 }
 
 export interface ChatMessage {
@@ -25,4 +27,13 @@ export interface ChatMessage {
   text: string;
   isUser: boolean;
   timestamp: Date;
+}
+
+export interface CreateStaffForm {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'staff' | 'admin';
+  password: string;
+  confirmPassword: string;
 }

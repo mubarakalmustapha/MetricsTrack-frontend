@@ -9,6 +9,7 @@ import {
   BarChart3,
   CheckCircle
 } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 
 interface AdminRegisterForm {
   firstName: string;
@@ -36,6 +37,8 @@ interface AdminRegisterProps {
 }
 
 const AdminRegister: React.FC<AdminRegisterProps> = ({ onRegister }) => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState<AdminRegisterForm>({
     firstName: '',
     lastName: '',
@@ -369,7 +372,7 @@ const AdminRegister: React.FC<AdminRegisterProps> = ({ onRegister }) => {
           </button>
         </div>
 
-        <div className="mt-8 text-center">
+        <div onClick={() => navigate('/login')} className="mt-8 text-center">
           <p className="text-sm text-gray-600">
             Already have an account?{' '}
             <button

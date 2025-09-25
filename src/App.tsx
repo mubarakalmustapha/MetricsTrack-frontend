@@ -1,26 +1,12 @@
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import LoginPage from "./components/LoginPage";
-import StaffDashboard from "./components/StaffDashboard";
+import StaffDashboard from "./components/StaffDashboard/StaffDashboard";
 import AdminLayout from "./components/AdminLayout";
 import AdminRegister from "./components/AdminRegister";
 import NotFound from "./components/NotFound";
 import { v4 as uuidv4 } from "uuid";
-
-
-
-type User = {
-  id: string;
-  name: string;
-  email: string;
-  role: "admin" | "staff";
-};
-
-type AdminUser = User & {
-  id: string;
-  name: string;
-};
-
+import type { AdminUser, StaffMember } from "./types/index";
 
 interface AdminRegisterForm {
   firstName: string;
@@ -33,7 +19,7 @@ interface AdminRegisterForm {
 }
 
 export default function App() {
-  const [currentUser, setCurrentUser] = useState<User | AdminUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<StaffMember | AdminUser | null>(null);
   const navigate = useNavigate();
 
   const handleRegister = (data: AdminRegisterForm) => {
@@ -62,7 +48,7 @@ export default function App() {
       setCurrentUser(user);
       navigate("/admin-dashboard");
     } else {
-      const user: User = { email, role };
+      const user: StaffMember = { email, role };
       setCurrentUser(user);
       navigate("/staff-dashboard");
     }
@@ -101,7 +87,7 @@ export default function App() {
         path="/admin-dashboard"
         element={
           currentUser && currentUser.role === "admin" ? (
-            <AdminLayout user={currentUser} onLogout={handleLogout} />
+            <AdminLayout admin={currentUser} onLogout={handleLogout} />
           ) : (
             <Navigate to="/login" replace />
           )
