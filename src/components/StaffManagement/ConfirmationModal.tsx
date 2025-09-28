@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ConfirmationModalProps {
-  selectedStaff: string | null;
+  selectedStaff: number | null;
   actionType: "reset" | "deactivate" | "activate" | null;
   cancelAction: () => void;
   confirmAction: () => void;

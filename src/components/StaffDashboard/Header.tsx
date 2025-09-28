@@ -2,14 +2,14 @@ import React from 'react';
 import { BarChart3, LogOut } from 'lucide-react';
 
 interface HeaderProps {
-  user: { name: string };
+  userName: string ;
   currentTime: Date;
   handleLogout: () => void;
   showLogoutConfirm: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
-  user,
+  userName,
   currentTime,
   handleLogout,
   showLogoutConfirm,
@@ -24,7 +24,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-800">
-                Welcome, {user.name} 👋
+                Welcome, {userName} 👋
               </h1>
               <p className="text-gray-600 text-sm">
                 {currentTime.toLocaleDateString('en-US', { 

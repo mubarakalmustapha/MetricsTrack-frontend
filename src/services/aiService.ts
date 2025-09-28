@@ -1,4 +1,4 @@
-import type { StaffMember } from '../types/index';
+import type { StaffUser } from '../types/index';
 
 export const AIService = {
   parseTime: (time: string): number => {
@@ -14,25 +14,31 @@ export const AIService = {
     return `${h}h ${m}m`;
   },
 
-  processQuery: (input: string, staffData: StaffMember[]): string => {
+  processQuery: (input: string, staffData: StaffUser[]): string => {
     const query = input.toLowerCase();
-    
+
+    const findStaffByName = () => {
+      return staffData.find(s => query.includes(s.firstName.toLowerCase()));
+    };
+
     if (query.includes("hours") && query.includes("week")) {
-      const staff = staffData.find(s => query.includes(s.name.toLowerCase()));
+      const staff = findStaffByName();
       return staff
-        ? `${staff.name} has worked **${staff.hoursWeek}** this week. Currently ${staff.status}.`
+        ? `${staff.firstName} has worked **${staff.hoursWeek}** this week. Currently ${staff.status}.`
         : "Please specify a valid staff name.";
     }
 
     if (query.includes("most hours")) {
-      const top = [...staffData].sort((a, b) => AIService.parseTime(b.hoursWeek) - AIService.parseTime(a.hoursWeek))[0];
-      return `This week, **${top.name}** worked the most with **${top.hoursWeek}**.`;
+      const top = [...staffData].sort(
+        (a, b) => AIService.parseTime(b.hoursWeek) - AIService.parseTime(a.hoursWeek)
+      )[0];
+      return `This week, **${top.firstName}** worked the most with **${top.hoursWeek}**.`;
     }
 
     if (query.includes("online")) {
       const onlineStaff = staffData.filter(s => s.status === "online");
       return onlineStaff.length
-        ? `Currently **${onlineStaff.length} staff** are online: ${onlineStaff.map(s => s.name).join(', ')}.`
+        ? `Currently **${onlineStaff.length} staff** are online: ${onlineStaff.map(s => s.firstName).join(', ')}.`
         : "No staff are online right now.";
     }
 
@@ -41,7 +47,7 @@ export const AIService = {
       staffData.forEach(s => {
         deptSummary[s.department] = (deptSummary[s.department] || 0) + AIService.parseTime(s.hoursWeek);
       });
-      return "Department breakdown:\n" + 
+      return "Department breakdown:\n" +
         Object.entries(deptSummary)
           .map(([dept, minutes]) => `• **${dept}**: ${AIService.formatTime(minutes)}`)
           .join("\n");

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import StaffManagement from "./StaffManagement/StaffManagement";
 import AdminDashboard from "./AdminDashboard/AdminDashboard";
-import type { AdminUser } from "../types/index";
+import type { User } from "../types/index";
 
 type Page = "dashboard" | "staff" | "reports";
 
 type AdminLayoutProps = {
-  admin: AdminUser;
+  admin: User;
   onLogout: () => void;
 };
 

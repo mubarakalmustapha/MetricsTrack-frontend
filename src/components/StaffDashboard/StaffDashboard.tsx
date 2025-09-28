@@ -4,16 +4,10 @@ import TimerSection from './TimerSection';
 import DailySummary from './DailySummary';
 import WeeklySummary from './WeeklySummary';
 import PerformanceBadge from './PerformanceBadge';
-
-interface StaffUser {
-  id: string;
-  name: string;
-  email: string;
-  workStartTime: Date;
-}
+import { type StaffUser } from '../../types/index'; 
 
 interface StaffDashboardProps {
-  user: StaffUser;
+  user: StaffUser
   onLogout: () => void;
 }
 
@@ -23,11 +17,11 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-  const hoursToday = 3.33;
+  const hoursToday = user.hoursToday ? parseFloat(user.hoursToday) : 3.33;
   const dailyTarget = 8;
 
-  const hoursWeek = 15.67;
-  const weeklyProgress = 15.67;
+  const hoursWeek = user.hoursWeek ? parseFloat(user.hoursWeek) : 15.67;
+  const weeklyProgress = hoursWeek;
   const weeklyTarget = 40;
 
   useEffect(() => {
@@ -40,7 +34,9 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
     if (!isPaused) {
       interval = setInterval(() => {
         const now = new Date();
-        const diffInSeconds = Math.floor((now.getTime() - user.workStartTime.getTime()) / 1000);
+        const diffInSeconds = Math.floor(
+          (now.getTime() - user.workStartTime.getTime()) / 1000
+        );
         setWorkSeconds(diffInSeconds);
       }, 1000);
     }
@@ -51,11 +47,17 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-    return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+    return `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const formatStartTime = (date: Date) =>
-    date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    });
 
   const handleLogout = () => {
     if (showLogoutConfirm) onLogout();
@@ -70,7 +72,7 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <Header
-        user={user}
+        userName={user.firstName}
         currentTime={currentTime}
         handleLogout={handleLogout}
         showLogoutConfirm={showLogoutConfirm}
@@ -89,7 +91,11 @@ const StaffDashboard: React.FC<StaffDashboardProps> = ({ user, onLogout }) => {
 
           <div className="space-y-6">
             <DailySummary currentValue={hoursToday} targetValue={dailyTarget} />
-            <WeeklySummary hoursWeek={hoursWeek} weeklyProgress={weeklyProgress} weeklyTarget={weeklyTarget} />
+            <WeeklySummary
+              hoursWeek={hoursWeek}
+              weeklyProgress={weeklyProgress}
+              weeklyTarget={weeklyTarget}
+            />
             <PerformanceBadge
               title="Amazing Work!"
               message="You're on track to meet your weekly goals. Keep up the excellent work!"
