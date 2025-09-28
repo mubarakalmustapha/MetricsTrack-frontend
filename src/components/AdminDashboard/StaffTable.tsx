@@ -1,9 +1,9 @@
 import React from 'react';
-import type { StaffMember, FilterPeriod } from '../../types/index';
+import type { StaffUser, FilterPeriod } from '../../types/index';
 import { BarChart3, Search } from 'lucide-react';
 
 interface StaffTableProps {
-  staff: StaffMember[];
+  staff: StaffUser[];
   searchQuery: string;
   onSearchChange: (value: string) => void;
   filterPeriod: FilterPeriod;
@@ -19,12 +19,12 @@ const StaffTable: React.FC<StaffTableProps> = ({
 }) => {
   const filteredStaff = staff.filter(
     (s) =>
-      s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       s.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       s.department.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const getHours = (staff: StaffMember): string => {
+  const getHours = (staff: StaffUser): string => {
     switch (filterPeriod) {
       case 'today':
         return staff.hoursToday;
@@ -117,7 +117,7 @@ const StaffTable: React.FC<StaffTableProps> = ({
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-gray-800">
-                          {staff.name}
+                          {staff.firstName} {staff.lastName}
                         </p>
                         <p className="text-xs text-gray-600">{staff.email}</p>
                       </div>
@@ -142,8 +142,10 @@ const StaffTable: React.FC<StaffTableProps> = ({
                           {staff.status === 'online' ? '🟢 Online' : '🔴 Offline'}
                         </span>
                       </div>
-                      {staff.workStartTime && (
-                        <p className="text-xs text-gray-500">Since {staff.workStartTime}</p>
+                      {staff.workStartTime && staff.status === 'online' && (
+                        <p className="text-xs text-gray-500">
+                          Since {staff.workStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
                       )}
                       {staff.lastSeen && staff.status === 'offline' && (
                         <p className="text-xs text-gray-500">Last seen {staff.lastSeen}</p>

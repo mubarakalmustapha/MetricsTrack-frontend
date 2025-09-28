@@ -1,25 +1,15 @@
 import React from "react";
 import { Search} from "lucide-react";
-import StaffTable, {type StaffMember } from './StaffTable';
-
-export type Staff = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: "staff" | "admin";
-  status: "active" | "inactive";
-  createdAt: Date;
-  lastLogin?: Date | null;
-};
+import StaffTable from './StaffTable';
+import type { StaffUser } from "../../types/index";
 
 interface StaffListProps {
-  filteredStaff: StaffMember[];
+  filteredStaff: StaffUser[];
   searchQuery: string;
   setSearchQuery: (value: string) => void;
   statusFilter: "all" | "active" | "inactive";
   setStatusFilter: (value: "all" | "active" | "inactive") => void;
-  handleStaffAction: (id: string, action: "reset" | "deactivate" | "activate") => void;
+  handleStaffAction: (id: number, action: "reset" | "deactivate" | "activate") => void;
 }
 
 const StaffList: React.FC<StaffListProps> = ({

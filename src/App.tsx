@@ -6,7 +6,7 @@ import AdminLayout from "./components/AdminLayout";
 import AdminRegister from "./components/AdminRegister";
 import NotFound from "./components/NotFound";
 import { v4 as uuidv4 } from "uuid";
-import type { AdminUser, StaffMember } from "./types/index";
+import type { StaffUser, User } from "./types/index";
 
 interface AdminRegisterForm {
   firstName: string;
@@ -18,38 +18,62 @@ interface AdminRegisterForm {
   agreeToTerms: boolean;
 }
 
+type CurrentUser = User | StaffUser;
+
 export default function App() {
-  const [currentUser, setCurrentUser] = useState<StaffMember | AdminUser | null>(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const navigate = useNavigate();
 
   const handleRegister = (data: AdminRegisterForm) => {
-    // Create a sample AdminUser object
-    const newAdminUser: AdminUser = {
-      id: uuidv4(),
-      name: `${data.firstName} ${data.lastName}`,
+    // Create a sample Admin user
+    const newAdminUser: User = {
+      id: Number(uuidv4()),
+      firstName: data.firstName,
+      lastName: data.lastName,
       email: data.email,
       role: "admin",
+      companyId: null,
     };
 
     setCurrentUser(newAdminUser);
-
     navigate("/admin-dashboard");
   };
 
-
   const handleLogin = (email: string, password: string, role: "admin" | "staff") => {
     if (role === "admin") {
-      const user: AdminUser = {
-        id: "1",
-        name: email.split("@")[0],
+      const user: User = {
+        id: 1,
+        firstName: email.split("@")[0],
+        lastName: "Admin",
         email,
         role,
+        companyId: null,
       };
       setCurrentUser(user);
       navigate("/admin-dashboard");
     } else {
-      const user: StaffMember = { email, role };
-      setCurrentUser(user);
+      const staff: StaffUser = {
+        id: 2,
+        firstName: email.split("@")[0],
+        lastName: "Staff",
+        email,
+        role: "staff",
+        companyId: null,
+        workStartTime: new Date(),
+        hoursToday: "0h",
+        hoursWeek: "0h",
+        hoursMonth: "0h",
+        presence: "active",
+        status: "online",
+        latestWorkLog: {
+          loginTime: new Date().toISOString(),
+          logoutTime: null,
+        },
+        lastSeen: new Date().toISOString(),
+        department: "Engineering",
+        avatar: "",
+      };
+      setCurrentUser(staff);
       navigate("/staff-dashboard");
     }
   };
@@ -68,15 +92,7 @@ export default function App() {
         path="/staff-dashboard"
         element={
           currentUser && currentUser.role === "staff" ? (
-            <StaffDashboard
-              user={{
-                id: "1",
-                name: currentUser.email.split("@")[0],
-                email: currentUser.email,
-                workStartTime: new Date(),
-              }}
-              onLogout={handleLogout}
-            />
+            <StaffDashboard user={currentUser as StaffUser} onLogout={handleLogout} />
           ) : (
             <Navigate to="/login" replace />
           )
@@ -87,7 +103,7 @@ export default function App() {
         path="/admin-dashboard"
         element={
           currentUser && currentUser.role === "admin" ? (
-            <AdminLayout admin={currentUser} onLogout={handleLogout} />
+            <AdminLayout admin={currentUser as User} onLogout={handleLogout} />
           ) : (
             <Navigate to="/login" replace />
           )
@@ -97,6 +113,5 @@ export default function App() {
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
-
   );
 }

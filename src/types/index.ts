@@ -1,25 +1,28 @@
 export type FilterPeriod = 'today' | 'week' | 'month';
 
-export interface AdminUser {
-  id: string;
-  name: string;
+export interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
   email: string;
   role: "admin" | "staff";
+  companyId?: number | null;
+  avatar?: string;
 }
 
-export interface StaffMember {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string;
-  status: 'online' | 'offline';
-  workStartTime?: string;
+export interface StaffUser extends User {
+  workStartTime: Date;
   hoursToday: string;
   hoursWeek: string;
   hoursMonth: string;
-  lastSeen?: string;
+  presence: "active" | "inactive";
+  status: "online" | "offline";
+  latestWorkLog: {
+    loginTime: string;
+    logoutTime: string | null;
+  };
+  lastSeen: string;
   department: string;
-  role: "admin" | "staff";
 }
 
 export interface ChatMessage {
@@ -36,4 +39,6 @@ export interface CreateStaffForm {
   role: 'staff' | 'admin';
   password: string;
   confirmPassword: string;
+  companyId?: number;
+  companyName?: string;
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import type { AdminUser } from '../../types/index';
+import type { User } from '../../types/index';
 import { Users, LogOut } from 'lucide-react';
 
 interface HeaderProps {
-  user: AdminUser;
+  user: User;
   onlineCount: number;
   totalStaff: number;
   weekTotalHours: string;
@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ user, onlineCount, totalStaff, weekTota
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-            <p className="text-gray-600 text-sm">Welcome back, {user.name}</p>
+            <p className="text-gray-600 text-sm">Welcome back, {user.firstName}</p>
           </div>
         </div>
 
